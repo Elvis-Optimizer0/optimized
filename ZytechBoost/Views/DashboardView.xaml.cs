@@ -86,7 +86,7 @@ public partial class DashboardView : UserControl
                     if (fe != null)
                     {
                         var delay = i * 50;
-                        Dispatcher.BeginInvoke(async () =>
+                        _ = Dispatcher.BeginInvoke(async () =>
                         {
                             await Task.Delay(delay);
                             fe.Opacity = 0;
