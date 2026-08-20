@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zytech Boost</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ═══ DARK THEME ═══ */
+:root {
+  --accent:#C01025;
+  --accent-dark:#8B0A1A;
+  --accent-glow:rgba(192,16,37,0.5);
+  --green:#16a34a;
+  --yellow:#eab308;
+  --red:#dc2626;
+  --text:#f0f0f5;
+  --text-sec:#9999b0;
+  --text-muted:#666680;
+  --glass:rgba(10,10,18,0.78);
+  --glass-border:rgba(255,255,255,0.07);
+  --nav-bg:rgba(8,8,16,0.92);
+  --toggle-off:#333348;
+  --row-hover:rgba(255,255,255,0.03);
+}
+body.light {
+  --accent:#B01020;
+  --text:#1a1a2e;
+  --text-sec:#555570;
+  --text-muted:#888;
+  --glass:rgba(255,255,255,0.62);
+  --glass-border:rgba(0,0,0,0.08);
+  --nav-bg:rgba(255,255,255,0.85);
+  --toggle-off:#ccc;
+  --row-hover:rgba(0,0,0,0.03);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;color:var(--text);min-height:100vh;overflow:hidden}
+
+/* ═══ BACKGROUND ═══ */
+.bg{position:fixed;inset:0;z-index:0;
+  background:url('bg-dark.jpg') center/cover no-repeat;
+  filter:brightness(0.38) saturate(1.3);
+  transition:filter 0.5s, background 0.5s;
+}
+body.light .bg{
+  background:url('bg-light.jpg') center/cover no-repeat;
+  filter:brightness(0.85) saturate(0) blur(1px);
+}
+
+/* ═══ APP ═══ */
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column}
+
+/* ═══ TOP NAV ═══ */
+.topnav{
+  display:flex;align-items:center;
+  padding:0 28px;height:52px;
+  background:var(--nav-bg);
+  backdrop-filter:blur(28px) saturate(1.5);
+  border-bottom:1px solid var(--glass-border);
+  gap:0;flex-shrink:0;
+}
+.topnav-brand{
+  font-size:16px;font-weight:800;margin-right:28px;
+  display:flex;align-items:center;gap:8px;
+}
+.topnav-brand .icon{
+  width:30px;height:30px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent-dark),#E82040);
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  box-shadow:0 0 14px var(--accent-glow);
+}
+.topnav-links{display:flex;gap:0;flex:1}
+.topnav-link{
+  padding:8px 16px;border:none;background:transparent;
+  color:var(--text-muted);font-family:inherit;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;
+  white-space:nowrap;
+}
+.topnav-link:hover{color:var(--text-sec)}
+.topnav-link.active{color:var(--accent);border-bottom-color:var(--accent)}
+.topnav-right{
+  display:flex;align-items:center;gap:10px;margin-left:auto;
+}
+.topnav-right select{
+  padding:4px 8px;border-radius:5px;border:1px solid var(--glass-border);
+  background:transparent;color:var(--text-sec);font-size:11px;font-family:inherit;cursor:pointer;
+}
+.topnav-right button{
+  padding:6px 14px;border-radius:6px;border:1px solid var(--glass-border);
+  background:transparent;color:var(--text-sec);font-size:11px;font-weight:600;
+  font-family:inherit;cursor:pointer;transition:all 0.2s;
+}
+.topnav-right button:hover{border-color:var(--accent);color:var(--text)}
+
+/* ═══ CONTENT ═══ */
+.content{flex:1;overflow-y:auto;padding:24px 28px;display:flex;justify-content:center}
+.content::-webkit-scrollbar{width:5px}
+.content::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* ═══ MAIN PANEL (glass) ═══ */
+.main-panel{
+  width:100%;max-width:820px;
+  background:var(--glass);
+  backdrop-filter:blur(22px) saturate(1.3);
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  padding:28px 32px;
+}
+
+/* ═══ PAGE ═══ */
+.page{display:none}
+.page.active{display:block}
+
+/* ═══ INICIO ═══ */
+.inicio-title{font-size:24px;font-weight:900;margin-bottom:2px}
+.inicio-sub{font-size:12px;color:var(--text-sec);line-height:1.6;margin-bottom:22px;max-width:580px}
+
+/* Profile tabs */
+.profiles{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.prof-tab{
+  padding:7px 16px;border-radius:18px;border:1px solid var(--glass-border);
+  background:transparent;color:var(--text-sec);font-family:inherit;
+  font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;
+}
+.prof-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 16px var(--accent-glow)}
+.prof-tab:hover:not(.active){border-color:var(--accent);color:var(--text)}
+.prof-desc{margin-left:auto;font-size:11px;color:var(--text-muted);font-style:italic;max-width:240px;text-align:right}
+.apply-btn{
+  margin-left:8px;padding:8px 20px;border-radius:8px;border:1px solid var(--accent);
+  background:rgba(192,16,37,0.12);color:var(--accent);font-family:inherit;
+  font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;
+}
+.apply-btn:hover{background:var(--accent);color:#fff;box-shadow:0 0 20px var(--accent-glow)}
+
+/* Stats row */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:22px}
+.stat{
+  border:1px solid var(--glass-border);border-radius:10px;
+  padding:14px 16px;
+  background:rgba(255,255,255,0.03);
+}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600;margin-bottom:4px}
+.stat-val{font-size:20px;font-weight:800}
+.stat-val small{font-size:11px;font-weight:500;color:var(--text-sec)}
+.stat-sys{display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+/* Optimizations */
+.sec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:10px}
+.opt-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 14px;border-radius:10px;margin-bottom:6px;
+  transition:background 0.15s;cursor:pointer;
+}
+.opt-row:hover{background:var(--row-hover)}
+.opt-info{flex:1}
+.opt-name{font-size:13px;font-weight:600}
+.opt-desc{font-size:10px;color:var(--text-muted);margin-top:1px;line-height:1.4}
+.opt-warn{font-size:9px;color:var(--yellow);margin-top:2px}
+.opt-pct{font-size:16px;font-weight:800;color:var(--accent);min-width:40px;text-align:right}
+
+/* Toggle */
+.tgl{position:relative;width:42px;height:22px;flex-shrink:0}
+.tgl input{opacity:0;width:0;height:0;position:absolute}
+.tgl-track{
+  position:absolute;inset:0;background:var(--toggle-off);border-radius:11px;cursor:pointer;transition:background 0.3s;
+}
+.tgl-track::before{
+  content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;
+  background:#fff;border-radius:50%;transition:transform 0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.3);
+}
+.tgl input:checked+.tgl-track{background:var(--accent)}
+.tgl input:checked+.tgl-track::before{transform:translateX(20px)}
+
+/* Category chips */
+.chips{display:flex;gap:6px;margin-top:16px}
+.chip{
+  padding:5px 12px;border-radius:14px;border:1px solid var(--glass-border);
+  background:transparent;color:var(--text-muted);font-size:10px;font-weight:600;
+  cursor:pointer;transition:all 0.2s;
+}
+.chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chip:hover:not(.active){border-color:var(--accent);color:var(--text-sec)}
+
+/* Bottom row */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.btm-box{border:1px solid var(--glass-border);border-radius:10px;padding:14px 16px;background:rgba(255,255,255,0.02)}
+.btm-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px}
+.btm-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:11px;color:var(--text-sec);border-bottom:1px solid var(--glass-border)}
+.btm-row:last-child{border:none}
+
+/* ═══ AJUSTES ═══ */
+.aj-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--glass-border);border-radius:10px;margin-bottom:8px;background:rgba(255,255,255,0.02)}
+.aj-label{font-size:13px;font-weight:600}
+.aj-desc{font-size:10px;color:var(--text-muted);margin-top:1px}
+.aj-select{padding:6px 10px;border-radius:6px;border:1px solid var(--glass-border);background:transparent;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer}
+
+/* ═══ PAQUETES ═══ */
+.pkg{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--glass-border);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:border-color 0.2s;background:rgba(255,255,255,0.02)}
+.pkg:hover{border-color:var(--accent)}
+.pkg-icon{font-size:24px;flex-shrink:0}
+.pkg-info{flex:1}
+.pkg-name{font-size:13px;font-weight:700}
+.pkg-desc{font-size:10px;color:var(--text-muted);margin-top:1px}
+.pkg-size{font-size:10px;color:var(--text-sec);margin-top:2px}
+.pkg-dl{padding:6px 14px;border-radius:6px;border:1px solid var(--accent);background:rgba(192,16,37,0.1);color:var(--accent);font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.pkg-dl:hover{background:var(--accent);color:#fff}
+
+/* ═══ BIOS ═══ */
+.bios-box{padding:32px;text-align:center;border:2px dashed var(--glass-border);border-radius:12px;margin-top:10px;transition:border-color 0.2s}
+.bios-box:hover{border-color:var(--accent)}
+.bios-box h3{font-size:16px;font-weight:800;margin-bottom:6px}
+.bios-box p{font-size:12px;color:var(--text-muted);line-height:1.6}
+
+/* ═══ AFINIDAD ═══ */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:700;text-align:left;padding:8px 12px;border-bottom:1px solid var(--glass-border)}
+.tbl td{font-size:11px;padding:8px 12px;border-bottom:1px solid var(--glass-border);color:var(--text-sec)}
+.tbl tr:hover td{background:var(--row-hover);color:var(--text)}
+.cpu-bar{width:50px;height:5px;background:var(--toggle-off);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px}
+.cpu-fill{height:100%;background:var(--accent);border-radius:3px}
+
+/* ═══ CATEGORY PAGE ═══ */
+.cat-desc{font-size:12px;color:var(--text-sec);line-height:1.5;margin-bottom:16px}
+.cat-apply{width:100%;padding:12px;border-radius:10px;border:1px solid var(--accent);background:rgba(192,16,37,0.12);color:var(--accent);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.cat-apply:hover{background:var(--accent);color:#fff;box-shadow:0 0 20px var(--accent-glow)}
+.cat-extreme-banner{padding:12px 16px;border:1px solid var(--red);border-radius:10px;margin-bottom:14px;background:rgba(220,38,38,0.06)}
+.cat-extreme-banner span{font-size:12px;color:var(--red);font-weight:600;line-height:1.5}
+
+/* ═══ MODAL ═══ */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal-box{background:var(--glass);backdrop-filter:blur(24px);border:1px solid var(--red);border-radius:14px;padding:28px;max-width:380px;width:90%;text-align:center}
+.modal-box h3{font-size:18px;font-weight:900;color:var(--red);margin-bottom:8px}
+.modal-box p{font-size:11px;color:var(--text-sec);line-height:1.5;margin-bottom:14px}
+.modal-input{width:100%;padding:10px;border-radius:8px;border:2px solid var(--glass-border);background:rgba(255,255,255,0.04);color:var(--text);font-family:inherit;font-size:15px;font-weight:700;text-align:center;letter-spacing:3px;outline:none;margin-bottom:14px}
+.modal-input:focus{border-color:var(--red)}
+.modal-btns{display:flex;gap:8px}
+.modal-btns button{flex:1;padding:10px;border-radius:8px;border:none;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.modal-btns .cancel{background:rgba(255,255,255,0.06);color:var(--text-sec)}
+.modal-btns .confirm{background:var(--red);color:#fff;opacity:0.3;pointer-events:none}
+.modal-btns .confirm.on{opacity:1;pointer-events:auto}
+
+/* ═══ TOAST ═══ */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--green);border-radius:10px;padding:12px 20px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(0,0,0,0.5);transform:translateY(70px);opacity:0;transition:all 0.35s cubic-bezier(.16,1,.3,1);z-index:200;font-size:12px;font-weight:600}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="app">
+  <!-- ═══ TOP NAV ═══ -->
+  <nav class="topnav">
+    <div class="topnav-brand"><div class="icon">⚡</div> <span>Zytech Boost</span></div>
+    <div class="topnav-links">
+      <button class="topnav-link active" onclick="showPage('inicio',this)">INICIO</button>
+      <button class="topnav-link" onclick="showPage('ajustes',this)">AJUSTES</button>
+      <button class="topnav-link" onclick="showPage('paquetes',this)">PAQUETES</button>
+      <button class="topnav-link" onclick="showPage('bios',this)">BIOS</button>
+      <button class="topnav-link" onclick="showPage('afinidad',this)">AFINIDAD</button>
+    </div>
+    <div class="topnav-right">
+      <select onchange="toggleLang(this.value)">
+        <option value="es">🇪🇸 ES</option>
+        <option value="en">🇺🇸 EN</option>
+      </select>
+      <button onclick="document.body.classList.toggle('light');this.textContent=document.body.classList.contains('light')?'🌙':'☀️'">☀️</button>
+      <button>Salir</button>
+    </div>
+  </nav>
+
+  <!-- ═══ CONTENT ═══ -->
+  <div class="content">
+
+    <!-- ── INICIO ── -->
+    <div class="main-panel">
+      <div class="page active" id="page-inicio">
+        <div class="inicio-title">Centro de Optimización</div>
+        <div class="inicio-sub">Cliente de escritorio — Panel limpio para preparar el equipo: preferencias locales, lecturas rápidas y acciones de mantenimiento. Las funciones avanzadas se irán sumando por sección.</div>
+
+        <div class="profiles">
+          <button class="prof-tab active" onclick="setProf(this)">PERFIL: Todo</button>
+          <button class="prof-tab" onclick="setProf(this)">Gaming</button>
+          <button class="prof-tab" onclick="setProf(this)">Productivo</button>
+          <div class="prof-desc">Enfocado en latencia, red, GPU y energía. «Aplicar Todo» solo usa las opciones de este perfil.</div>
+          <button class="apply-btn" onclick="showToast('⚡ Optimización completa aplicada')">⚡ Aplicar Todo</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="stat-lbl">CPU</div><div class="stat-val" id="cpuV">~13% <small>Uso del sistema</small></div></div>
+          <div class="stat"><div class="stat-lbl">GPU</div><div class="stat-val" id="gpuV">~0% <small>Uso GPU</small></div></div>
+          <div class="stat"><div class="stat-lbl">RAM</div><div class="stat-val" id="ramV">~47% <small>Uso de memoria</small></div></div>
+          <div class="stat stat-sys"><div class="stat-lbl">SISTEMA</div><div class="stat-val">Windows</div></div>
+        </div>
+
+        <div class="sec-title">Optimizaciones</div>
+        <div id="optHome"></div>
+
+        <div class="chips">
+          <div class="chip active" onclick="filterChip(this,'all')">Todos</div>
+          <div class="chip" onclick="filterChip(this,'cpu')">CPU</div>
+          <div class="chip" onclick="filterChip(this,'gpu')">GPU</div>
+          <div class="chip" onclick="filterChip(this,'ram')">RAM</div>
+        </div>
+
+        <div class="bottom-row">
+          <div class="btm-box">
+            <div class="btm-title">¿Qué es este toggle?</div>
+            <div class="btm-row"><span>Modo rendimiento</span><label class="tgl"><input type="checkbox" checked><span class="tgl-track"></span></label></div>
+            <div class="btm-row"><span>Reduce blur y animaciones en esta ventana para priorizar fluidez</span></div>
+          </div>
+          <div class="btm-box">
+            <div class="btm-title">Punto de Restauración</div>
+            <div class="btm-row"><span>Estado</span><span id="rstSt" style="color:var(--yellow)">⏳ Pendiente</span></div>
+            <div class="btm-row"><span>Crear manualmente</span><button onclick="document.getElementById('rstSt').innerHTML='&lt;span style=color:var(--green)&gt;✓ Creado&lt;/span&gt;';showToast('🛡️ Punto de restauración creado')" style="padding:3px 10px;border-radius:5px;border:1px solid var(--glass-border);background:transparent;color:var(--text-sec);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit">Crear</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AJUSTES ── -->
+      <div class="page" id="page-ajustes">
+        <div class="sec-title" style="margin-bottom:14px">⚙️ Ajustes</div>
+        <div class="aj-row">
+          <div><div class="aj-label">🌍 Idioma</div><div class="aj-desc">Cambia el idioma de la interfaz</div></div>
+          <select class="aj-select" onchange="toggleLang(this.value)"><option value="es">Español</option><option value="en">English</option></select>
+        </div>
+        <div class="aj-row">
+          <div><div class="aj-label">🎨 Tema Oscuro / Claro</div><div class="aj-desc">Cambia entre tema oscuro (fondo 3D color) y claro (fondo B&W)</div></div>
+          <label class="tgl"><input type="checkbox" onchange="document.body.classList.toggle('light',this.checked)"><span class="tgl-track"></span></label>
+        </div>
+        <div class="aj-row">
+          <div><div class="aj-label">📊 Monitoreo en tiempo real</div><div class="aj-desc">Muestra CPU, GPU y RAM actualizados en el dashboard</div></div>
+          <label class="tgl"><input type="checkbox" checked><span class="tgl-track"></span></label>
+        </div>
+        <div class="aj-row">
+          <div><div class="aj-label">🛡️ Restauración automática</div><div class="aj-desc">Crear punto antes de cada optimización</div></div>
+          <label class="tgl"><input type="checkbox" checked><span class="tgl-track"></span></label>
+        </div>
+        <div class="aj-row">
+          <div><div class="aj-label">📄 Log en escritorio</div><div class="aj-desc">Registra cada acción en OptiPC_Log_</div></div>
+          <label class="tgl"><input type="checkbox" checked><span class="tgl-track"></span></label>
+        </div>
+      </div>
+
+      <!-- ── PAQUETES ── -->
+      <div class="page" id="page-paquetes">
+        <div class="sec-title" style="margin-bottom:6px">📦 Paquetes — Librerías del Sistema</div>
+        <p style="font-size:11px;color:var(--text-muted);margin-bottom:16px;line-height:1.5">Librerías y componentes necesarios. Haz clic en "Descargar" para obtener la versión más reciente.</p>
+        <div class="pkg" onclick="window.open('https://aka.ms/dxwebsetup','_blank')"><div class="pkg-icon">🎮</div><div class="pkg-info"><div class="pkg-name">Microsoft DirectX</div><div class="pkg-desc">Runtime de gráficos y audio para Windows</div><div class="pkg-size">Última versión estable</div></div><a class="pkg-dl" href="https://aka.ms/dxwebsetup" target="_blank">Descargar</a></div>
+        <div class="pkg" onclick="window.open('https://aka.ms/vs/17/release/vc_redist.x64.exe','_blank')"><div class="pkg-icon">🔧</div><div class="pkg-info"><div class="pkg-name">Visual C++ Redistributable 2015-2022 (x64)</div><div class="pkg-desc">Componente esencial para juegos y apps Windows</div><div class="pkg-size">~24 MB — x64</div></div><a class="pkg-dl" href="https://aka.ms/vs/17/release/vc_redist.x64.exe" target="_blank">Descargar</a></div>
+        <div class="pkg" onclick="window.open('https://aka.ms/vs/17/release/vc_redist.x86.exe','_blank')"><div class="pkg-icon">🔧</div><div class="pkg-info"><div class="pkg-name">Visual C++ Redistributable 2015-2022 (x86)</div><div class="pkg-desc">Versión de 32 bits para compatibilidad legacy</div><div class="pkg-size">~13 MB — x86</div></div><a class="pkg-dl" href="https://aka.ms/vs/17/release/vc_redist.x86.exe" target="_blank">Descargar</a></div>
+        <div class="pkg" onclick="window.open('https://dotnet.microsoft.com/download/dotnet/8.0','_blank')"><div class="pkg-icon">⚡</div><div class="pkg-info"><div class="pkg-name">.NET Desktop Runtime 8.0</div><div class="pkg-desc">Runtime para apps WPF con .NET 8</div><div class="pkg-size">Última versión</div></div><a class="pkg-dl" href="https://dotnet.microsoft.com/download/dotnet/8.0" target="_blank">Descargar</a></div>
+        <div class="pkg" onclick="window.open('https://aka.ms/windows/ndp48-web','_blank')"><div class="pkg-icon">📦</div><div class="pkg-info"><div class="pkg-name">.NET Framework 4.8</div><div class="pkg-desc">Framework heredado para apps y juegos antiguos</div><div class="pkg-size">~70 MB</div></div><a class="pkg-dl" href="https://aka.ms/windows/ndp48-web" target="_blank">Descargar</a></div>
+        <div class="pkg" onclick="window.open('https://aka.ms/vs/16/release/vc_redist.x64.exe','_blank')"><div class="pkg-icon">📚</div><div class="pkg-info"><div class="pkg-name">Visual C++ Redistributable 2013</div><div class="pkg-desc">Requerido por juegos construidos con VS 2013</div><div class="pkg-size">~6.9 MB</div></div><a class="pkg-dl" href="https://aka.ms/vs/16/release/vc_redist.x64.exe" target="_blank">Descargar</a></div>
+      </div>
+
+      <!-- ── BIOS ── -->
+      <div class="page" id="page-bios">
+        <div class="sec-title" style="margin-bottom:6px">📋 BIOS — Guía de Optimización</div>
+        <p style="font-size:11px;color:var(--text-muted);margin-bottom:16px;line-height:1.5">El PDF con la guía de BIOS será implementado aquí. Incluirá configuraciones de XMP/EXPO, Resizable BAR, C-States, HPET, Virtualization, Fast Boot y más.</p>
+        <div class="bios-box" onclick="showToast('📂 Selecciona el PDF de BIOS')">
+          <h3>📄 Guía de BIOS Pendiente</h3>
+          <p>Arrastra el PDF aquí o haz clic para seleccionar</p>
+        </div>
+      </div>
+
+      <!-- ── AFINIDAD (Procesos + Actualizaciones) ── -->
+      <div class="page" id="page-afinidad">
+        <div class="sec-title" style="margin-bottom:6px">🧠 Afinidad — Organización y Actualizaciones</div>
+        <div class="sec-title">Procesos Principales</div>
+        <div style="overflow-x:auto;margin-bottom:20px">
+          <table class="tbl">
+            <thead><tr><th>Proceso</th><th>CPU</th><th>RAM</th><th>Estado</th><th>Acción</th></tr></thead>
+            <tbody id="procTb"></tbody>
+          </table>
+        </div>
+        <div class="sec-title">Actualizaciones del Sistema</div>
+        <div style="border:1px solid var(--glass-border);border-radius:10px;padding:14px 16px;background:rgba(255,255,255,0.02)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:12px;font-weight:600">Estado de Windows Update</span>
+            <span style="font-size:11px;color:var(--green);font-weight:600">✓ Al día</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.6;margin-bottom:10px">Última actualización: KB5034441 — 15 ene 2025</div>
+          <div style="display:flex;gap:6px">
+            <button class="apply-btn" style="font-size:11px;padding:6px 14px" onclick="showToast('🔄 Buscando actualizaciones...')">Buscar updates</button>
+            <button class="apply-btn" style="font-size:11px;padding:6px 14px;border-color:var(--yellow);color:var(--yellow);background:rgba(234,179,8,0.08)" onclick="showToast('⏸️ Updates pausados por 365 días')">Pausar 365 días</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CATEGORY PAGES ── -->
+      <div class="page" id="page-limpieza"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">🧹 Limpieza y Mantenimiento</div><div class="cat-desc">Limpia archivos temporales, caché DNS, SoftwareDistribution, thumbcache y papelera.</div><div id="cat-limpieza"></div><button class="cat-apply" onclick="showToast('🧹 Limpieza aplicada')">Aplicar categoría</button></div>
+      <div class="page" id="page-perifericos"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">🖱️ Periféricos e Input Lag</div><div class="cat-desc">Mouse: aceleración off, curva 1:1. Teclado: bounce time 0.</div><div id="cat-perifericos"></div><button class="cat-apply" onclick="showToast('🖱️ Periféricos optimizados')">Aplicar categoría</button></div>
+      <div class="page" id="page-kernel"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">🧠 Núcleo, Memoria y Kernel</div><div class="cat-desc">MMCSS, VBS, dynamic tick, Game DVR, compresión de memoria.</div><div id="cat-kernel"></div><button class="cat-apply" onclick="showToast('🧠 Kernel optimizado')">Aplicar categoría</button></div>
+      <div class="page" id="page-cpu"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">⚙️ CPU: Core Parking y P-States</div><div class="cat-desc">Desactiva Core Parking, ajusta frecuencia mínima/máxima al 100%.</div><div id="cat-cpu"></div><button class="cat-apply" onclick="showToast('⚙️ CPU optimizada')">Aplicar categoría</button></div>
+      <div class="page" id="page-red"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">🌐 Red y Conectividad</div><div class="cat-desc">TCP, Nagle, heurísticas, RSS, interrupt moderation.</div><div id="cat-red"></div><button class="cat-apply" onclick="showToast('🌐 Red optimizada')">Aplicar categoría</button></div>
+      <div class="page" id="page-gpu"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">🎮 GPU y Gráficos</div><div class="cat-desc">Modo MSI, HAGS, TDR, modo juego, PowerMizer.</div><div id="cat-gpu"></div><button class="cat-apply" onclick="showToast('🎮 GPU optimizada')">Aplicar categoría</button></div>
+      <div class="page" id="page-storage"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">💿 Almacenamiento SSD/NVMe</div><div class="cat-desc">TRIM, last access timestamp, optimize-volume.</div><div id="cat-storage"></div><button class="cat-apply" onclick="showToast('💿 Storage optimizado')">Aplicar categoría</button></div>
+      <div class="page" id="page-energia"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">🔋 Energía y Dispositivos</div><div class="cat-desc">HPET, plan Ultimate Performance, PCIe/SATA power.</div><div id="cat-energia"></div><button class="cat-apply" onclick="showToast('🔋 Energía optimizada')">Aplicar categoría</button></div>
+      <div class="page" id="page-visuales"><div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">👁️ Visuales, Debloat y Privacidad</div><div class="cat-desc">Efectos visuales, apps en segundo plano, Copilot, telemetría, bloatware.</div><div id="cat-visuales"></div><button class="cat-apply" onclick="showToast('👁️ Visuales optimizados')">Aplicar categoría</button></div>
+      <div class="page" id="page-extremo">
+        <div class="cat-extreme-banner"><span>⚠️ ZONA EXTREMA — Búsqueda, Impresión, BITS, Defender en tiempo real, Timer 1ms. Punto de restauración cubre todo.</span></div>
+        <div class="sec-title" style="font-size:16px;font-weight:800;text-transform:none;letter-spacing:0;margin-bottom:4px">☠️ Zona Extrema</div>
+        <div class="cat-desc">Servicios adicionales, Defender RT, Timer Resolution 1ms persistente.</div>
+        <div id="cat-extremo"></div>
+        <button class="cat-apply" style="background:var(--red);border-color:var(--red);color:#fff" onclick="document.getElementById('modal').classList.add('open')">🔥 Aplicar Zona Extrema</button>
+      </div>
+    </div><!-- /main-panel -->
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <h3>⚠️ Modo Extremo</h3>
+    <p>Escribe <strong>CONFIRMAR</strong> para habilitar el botón.</p>
+    <input class="modal-input" id="mInput" placeholder="CONFIRMAR" oninput="document.getElementById('mBtn').classList.toggle('on',this.value==='CONFIRMAR')">
+    <div class="modal-btns">
+      <button class="cancel" onclick="document.getElementById('modal').classList.remove('open')">Cancelar</button>
+      <button class="confirm" id="mBtn" onclick="document.getElementById('modal').classList.remove('open');showToast('🔥 MODO EXTREMO APLICADO')">Aplicar Extremo</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="tI">✅</span> <span id="tT"></span></div>
+
+<script>
+const opts=[
+  {n:'Modo rendimiento',d:'Reduce blur y animaciones para priorizar fluidez',p:13,c:'cpu'},
+  {n:'Core Parking Off',d:'Desactiva apagado de cores inactivos',p:8,c:'cpu'},
+  {n:'TCP Optimizado',d:'Auto-tuning normal, RSS, timestamps off',p:5,c:'red'},
+  {n:'Game DVR Off',d:'Desactiva grabación del Game Bar',p:3,c:'gpu'},
+  {n:'Compresión RAM',d:'Kernel memory compression activada',p:12,c:'ram'},
+  {n:'Efectos Visuales Off',d:'UserPreferencesMask optimizado',p:4,c:'cpu'},
+  {n:'Power Throttling Off',d:'CPU sin limitación de energía',p:6,c:'cpu'},
+  {n:'TRIM Habilitado',d:'SSD/NVMe con rendimiento óptimo',p:2,c:'gpu'},
+];
+
+const cats={
+  limpieza:[{n:'Limpiar Temporales',d:'%TEMP% + C:\\Windows\\Temp'},{n:'Caché DNS',d:'Clear-DnsClientCache'},{n:'SoftwareDistribution',d:'Descargas de Windows Update'},{n:'Thumbcache',d:'Miniaturas del explorador'},{n:'Papelera',d:'Recycle Bin completo'}],
+  perifericos:[{n:'Teclado Bounce=0',d:'AutoRepeatDelay=200, Rate=15'},{n:'Mouse Aceleración Off',d:'MouseSpeed=0, Threshold1/2=0'},{n:'Curva Lineal 1:1',d:'SmoothMouseXCurve/YCurve'},{n:'Sensibilidad = 10',d:'Relación 1:1 con superficie'}],
+  kernel:[{n:'DisablePagingExecutive',d:'Kernel en RAM (≥8GB)',ch:1},{n:'Win32Priority=38',d:'Prioridad óptima RT',ch:1},{n:'MMCSS Games',d:'GPU Priority=8, SFIO=High',ch:1},{n:'SysResponsiveness=0',d:'Prioriza multimedia',ch:1},{n:'PowerThrottlingOff',d:'CPU sin throttling',ch:1},{n:'VBS Off',d:'Reduce overhead virtualización',ch:1,w:'⚠️ Afecta Valorant/Vanguard'},{n:'DynamicTick+TSCSync',d:'bcdedit + tscsyncpolicy Enhanced',ch:1},{n:'Game DVR Off',d:'GameDVR_Enabled=0',ch:1},{n:'Compresión RAM',d:'Kernel memory compression',ch:1}],
+  cpu:[{n:'Core Parking Off',d:'powercfg SUB_PROCESSOR',ch:1},{n:'P-State Min=100%',d:'Frecuencia alta constante',ch:1},{n:'P-State Max=100%',d:'Límite superior máximo',ch:1}],
+  red:[{n:'TCP Auto-Tuning=Normal',d:'netsh int tcp set global',ch:1},{n:'RSS Enabled',d:'Receive Side Scaling',ch:1},{n:'Timestamps+ECN Off',d:'Reduce overhead TCP',ch:1},{n:'NetworkThrottling=Max',d:'4294967295',ch:1},{n:'Interrupt Moderation Off',d:'Menos latencia, más CPU',ch:1,w:'⚠️ Aumenta uso CPU'},{n:'Nagle Off',d:'AckFrequency=1',ch:1},{n:'Heurísticas Off',d:'Sin autotuning agresivo',ch:1},{n:'DNS Priority+LSO Off',d:'Large Send Offload off',ch:1}],
+  gpu:[{n:'Modo MSI',d:'Message-Signaled Interrupts',ch:1},{n:'HAGS',d:'Hardware Accelerated GPU Scheduling',ch:1},{n:'TDR Delay=10s',d:'Timeout extendido GPU',ch:1},{n:'Modo Juego',d:'Game Mode para todas apps',ch:1},{n:'PowerMizer',d:'NVIDIA máximo rendimiento',ch:0}],
+  storage:[{n:'TRIM Enabled',d:'DisableDeleteNotify=0',ch:1},{n:'LastAccess Off',d:'DisableLastAccess=1',ch:1},{n:'Optimize-Volume',d:'TRIM forzado SSD/NVMe',ch:1}],
+  energia:[{n:'HPET Off',d:'bcdedit /deletevalue useplatformclock',ch:1},{n:'Ultimate Performance',d:'Plan de energía máximo',ch:1},{n:'PCIe LinkState Off',d:'Sin ahorro energía PCIe',ch:1},{n:'SATA Power Off',d:'Sin ahorro energía discos',ch:1}],
+  visuales:[{n:'Efectos Visuales Min',d:'UserPreferencesMask optimizado',ch:1},{n:'Transparencia Off',d:'Acrylic disabled',ch:1},{n:'Apps BG Off',d:'Bloquea apps background',ch:1},{n:'Copilot Off',d:'Windows Copilot eliminado',ch:1},{n:'Telemetría Off',d:'TelemetryLevel reducido',ch:1},{n:'Bloatware Off',d:'Xbox, 3D Viewer, etc.',ch:1},{n:'Pausar Updates',d:'365 días de pausa',ch:0,w:'⚠️ Incluye parches seguridad'}],
+  extremo:[{n:'WSearch Off',d:'Sin búsqueda archivos',ch:1,w:'⚠️ No funcionará búsqueda'},{n:'Spooler Off',d:'Sin impresión',ch:1,w:'⚠️ No podrás imprimir'},{n:'BITS Off',d:'Background Transfer off',ch:1,w:'⚠️ Afecta Windows Update'},{n:'DiagTrack Off',d:'Connected Experiences off',ch:1},{n:'Defender RT Off',d:'Protección en tiempo real off',ch:0,w:'⚠️ SIN ANTIVIRUS'},{n:'Timer 1ms',d:'Proceso en background',ch:1,w:'⚠️ powershell.exe corriendo'}]
+};
+
+const procs=[
+  {n:'explorer.exe',c:2.1,r:'84 MB',s:'Activo'},{n:'dwm.exe',c:4.3,r:'156 MB',s:'Activo'},
+  {n:'svchost.exe',c:0.8,r:'42 MB',s:'Activo'},{n:'csrss.exe',c:0.2,r:'8 MB',s:'Sistema'},
+  {n:'ntoskrnl.exe',c:1.1,r:'32 MB',s:'Sistema'},{n:'SearchIndexer.exe',c:0.0,r:'24 MB',s:'Inactivo'},
+  {n:'spoolsv.exe',c:0.0,r:'4 MB',s:'Inactivo'},{n:'SecurityHealth.exe',c:0.3,r:'18 MB',s:'Activo'},
+];
+
+// Render home opts
+function renderHome(){
+  document.getElementById('optHome').innerHTML=opts.map(o=>`<div class="opt-row"><div class="opt-info"><div class="opt-name">${o.n}</div><div class="opt-desc">${o.d}</div></div><div class="opt-pct">${o.p}%</div><label class="tgl"><input type="checkbox" checked><span class="tgl-track"></span></label></div>`).join('');
+}
+// Render categories
+function renderCats(){
+  Object.keys(cats).forEach(k=>{
+    const el=document.getElementById('cat-'+k);if(!el)return;
+    el.innerHTML=cats[k].map(t=>`<div class="opt-row"><div class="opt-info"><div class="opt-name">${t.n}</div><div class="opt-desc">${t.d}</div>${t.w?'<div class="opt-warn">'+t.w+'</div>':''}</div><label class="tgl"><input type="checkbox" ${t.ch?'checked':''}><span class="tgl-track"></span></label></div>`).join('');
+  });
+}
+// Render procs
+function renderProcs(){
+  document.getElementById('procTb').innerHTML=procs.map(p=>`<tr><td style="font-weight:600;color:var(--text)">${p.n}</td><td>${p.c}%<div class="cpu-bar"><div class="cpu-fill" style="width:${Math.min(p.c*10,100)}%"></div></div></td><td>${p.r}</td><td style="color:${p.s==='Activo'?'var(--green)':p.s==='Inactivo'?'var(--text-muted)':'var(--yellow)'}">${p.s}</td><td><button style="padding:3px 8px;border-radius:4px;border:1px solid var(--glass-border);background:transparent;color:var(--text-sec);font-size:9px;font-weight:600;cursor:pointer;font-family:inherit" onclick="showToast('⚙️ Optimizando ${p.n}')">Optimizar</button></td></tr>`).join('');
+}
+// Nav
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.topnav-link').forEach(b=>b.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
+  if(btn)btn.classList.add('active');
+  document.querySelector('.content').scrollTop=0;
+  // If it's a category, also show in nav
+  if(['limpieza','perifericos','kernel','cpu','red','gpu','storage','energia','visuales','extremo'].includes(id)){
+    document.querySelectorAll('.topnav-link').forEach(b=>b.classList.remove('active'));
+  }
+}
+// Profile
+function setProf(btn){document.querySelectorAll('.prof-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');showToast('Perfil: '+btn.textContent.trim())}
+// Filter
+function filterChip(chip,cat){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));chip.classList.add('active');
+  const f=cat==='all'?opts:opts.filter(o=>o.c===cat);
+  document.getElementById('optHome').innerHTML=f.map(o=>`<div class="opt-row"><div class="opt-info"><div class="opt-name">${o.n}</div><div class="opt-desc">${o.d}</div></div><div class="opt-pct">${o.p}%</div><label class="tgl"><input type="checkbox" checked><span class="tgl-track"></span></label></div>`).join('');
+}
+// Lang
+function toggleLang(v){
+  const sub=document.querySelector('.inicio-sub');
+  if(v==='en')sub.textContent='Desktop client — Clean panel to prepare the system: local preferences, quick readings and maintenance actions.';
+  else sub.textContent='Cliente de escritorio — Panel limpio para preparar el equipo: preferencias locales, lecturas rápidas y acciones de mantenimiento. Las funciones avanzadas se irán sumando por sección.';
+}
+// Stats simulation
+function updStats(){
+  document.getElementById('cpuV').innerHTML='~'+(5+Math.floor(Math.random()*20))+'% <small>Uso del sistema</small>';
+  document.getElementById('gpuV').innerHTML='~'+Math.floor(Math.random()*10)+'% <small>Uso GPU</small>';
+  document.getElementById('ramV').innerHTML='~'+(35+Math.floor(Math.random()*20))+'% <small>Uso de memoria</small>';
+}
+// Toast
+function showToast(t,i){const e=document.getElementById('toast');document.getElementById('tT').textContent=t;document.getElementById('tI').textContent=i||'✅';e.classList.add('show');setTimeout(()=>e.classList.remove('show'),3000)}
+// Init
+renderHome();renderCats();renderProcs();setInterval(updStats,3000);
+</script>
+</body>
+</html>
