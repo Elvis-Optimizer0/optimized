@@ -27,6 +27,7 @@
   <ItemGroup>
     <Resource Include="Assets\*.*" />
     <Resource Include="Styles\*.xaml" />
+    <EmbeddedResource Include="Scripts\*.ps1" />
   </ItemGroup>
 
 </Project>
