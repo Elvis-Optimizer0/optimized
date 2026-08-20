@@ -1,0 +1,150 @@
+<UserControl x:Class="ZytechBoost.Views.ExecutionPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:ZytechBoost.Models"
+             Background="Transparent">
+
+    <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- ═══════════ HEADER ═══════════ -->
+            <Grid Grid.Row="0" Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="⚡" FontSize="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock x:Name="TitleText" Text="Ejecución en Tiempo Real" 
+                               FontSize="16" FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryTextBrush}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button x:Name="BtnClose" Grid.Column="1" Content="✕"
+                        Style="{StaticResource SecondaryButton}"
+                        Padding="8,4" FontSize="12"
+                        Click="BtnClose_Click"
+                        Visibility="Collapsed"/>
+            </Grid>
+
+            <!-- ═══════════ STATUS BAR ═══════════ -->
+            <Border Grid.Row="1" Background="{StaticResource SecondaryBgBrush}"
+                    CornerRadius="8" Padding="14,10" Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock x:Name="StatusText" Text="Esperando ejecución..."
+                                   FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{StaticResource SecondaryTextBrush}"/>
+                        <TextBlock x:Name="DetailText" Text=""
+                                   FontSize="11"
+                                   Foreground="{StaticResource MutedTextBrush}"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <TextBlock x:Name="ProgressText" Grid.Column="1"
+                               Text="" FontSize="22" FontWeight="Bold"
+                               Foreground="{StaticResource AccentBrush}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ═══════════ PROGRESS BAR ═══════════ -->
+            <ProgressBar x:Name="ProgressBar" Grid.Row="2"
+                         Style="{StaticResource DarkProgressBar}"
+                         Margin="0,0,0,12" Height="6"
+                         Visibility="Collapsed"/>
+
+            <!-- ═══════════ TWEAK STATUS LIST ═══════════ -->
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl x:Name="EventsList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:ExecutionEvent}">
+                            <Border Background="Transparent" CornerRadius="8"
+                                    Padding="10,8" Margin="0,0,0,2">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Status Icon -->
+                                    <TextBlock Grid.Column="0" 
+                                               Text="{Binding StatusIcon}"
+                                               FontSize="16" VerticalAlignment="Center"
+                                               Margin="0,0,10,0"/>
+
+                                    <!-- Tweak Name -->
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding TweakName}"
+                                               FontSize="13" FontWeight="SemiBold"
+                                               Foreground="{StaticResource PrimaryTextBrush}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+
+                                    <!-- Status Color Indicator -->
+                                    <Border Grid.Column="2" Width="8" Height="8"
+                                            CornerRadius="4" VerticalAlignment="Center"
+                                            Margin="8,0,0,0">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="{Binding StatusColor}"/>
+                                        </Border.Background>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- ═══════════ LOG OUTPUT ═══════════ -->
+            <Border Grid.Row="2" Background="{StaticResource HeaderBgBrush}"
+                    CornerRadius="8" Padding="12,8" Margin="0,0,0,0"
+                    Visibility="Collapsed" x:Name="LogBorder">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="📋 Log de salida" FontSize="11" FontWeight="SemiBold"
+                               Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,6"/>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <TextBlock x:Name="LogOutput" Text=""
+                                   FontFamily="Consolas" FontSize="11"
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- ═══════════ FOOTER ═══════════ -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center"
+                        Margin="0,12,0,0">
+                <Button x:Name="BtnCancel" Content="⏹ Cancelar"
+                        Style="{StaticResource DangerButton}"
+                        MinWidth="140" MinHeight="36" FontSize="12"
+                        Click="BtnCancel_Click"
+                        Visibility="Collapsed"/>
+                <Button x:Name="BtnViewHistory" Content="📋 Ver Historial"
+                        Style="{StaticResource SecondaryButton}"
+                        MinWidth="140" MinHeight="36" FontSize="12"
+                        Click="BtnViewHistory_Click"
+                        Margin="8,0,0,0" Visibility="Collapsed"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

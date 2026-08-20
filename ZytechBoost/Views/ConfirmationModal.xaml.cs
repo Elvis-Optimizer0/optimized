@@ -72,53 +72,10 @@ public partial class ConfirmationModal : Window
         Close();
     }
 
-    private async void BtnConfirm_Click(object sender, RoutedEventArgs e)
+    private void BtnConfirm_Click(object sender, RoutedEventArgs e)
     {
-        // Disable UI during execution
-        BtnConfirm.IsEnabled = false;
-        ConfirmInput.IsEnabled = false;
-
-        MainWindow.Log("Zona Extrema confirmada — ejecutando tweaks extremos...");
-
-        try
-        {
-            // Create restore point first
-            if (!MainWindow.RestorePointCreated)
-            {
-                await PowerShellEngine.CreateRestorePointAsync();
-                MainWindow.RestorePointCreated = true;
-            }
-
-            // Execute all extreme categories
-            var allFunctions = new List<string>();
-            foreach (var cat in _extremeCategories)
-            {
-                allFunctions.AddRange(cat.ScriptFunctions);
-            }
-
-            await PowerShellEngine.ExecuteFunctionsAsync(allFunctions);
-
-            MainWindow.Log("Zona Extrema aplicada exitosamente.");
-
-            MessageBox.Show(
-                "✅ Zona Extrema aplicada correctamente.\n\n" +
-                "Reinicia el equipo para el efecto completo.\n\n" +
-                "NOTA: Algunos servicios fueron desactivados. " +
-                "Revierte desde services.msc si necesitas funciones como Búsqueda o Impresión.",
-                "Zytech Boost",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(
-                $"Error al ejecutar Zona Extrema:\n{ex.Message}",
-                "Zytech Boost — Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-            MainWindow.Log($"Error en Zona Extrema: {ex.Message}");
-        }
-
+        MainWindow.Log("Zona Extrema confirmada — procediendo con ejecución...");
+        DialogResult = true;
         Close();
     }
 }

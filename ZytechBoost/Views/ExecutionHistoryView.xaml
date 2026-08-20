@@ -1,0 +1,93 @@
+<UserControl x:Class="ZytechBoost.Views.ExecutionHistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:ZytechBoost.Models"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <Grid Margin="28,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <Button Content="← Volver al Panel" Style="{StaticResource SecondaryButton}"
+                    HorizontalAlignment="Left" Click="BtnBack_Click" Margin="0,0,0,12"
+                    Padding="12,8"/>
+            <TextBlock Text="📜 Historial de Ejecuciones" Style="{StaticResource TitleText}" FontSize="28"/>
+            <TextBlock Text="Registro de todas las optimizaciones aplicadas en esta sesión"
+                       Style="{StaticResource SubtitleText}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- HISTORY LIST -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="HistoryList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:ExecutionSession}">
+                        <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12"
+                                Cursor="Hand" Tag="{Binding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Status Icon -->
+                                <Border Grid.Column="0" Width="48" Height="48"
+                                        CornerRadius="12" VerticalAlignment="Top"
+                                        Margin="0,0,14,0">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{Binding IsRunning, 
+                                            Converter={x:Static models:SessionStatusConverter.Instance}}"/>
+                                    </Border.Background>
+                                    <TextBlock FontSize="22" HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center"
+                                               Text="{Binding IsRunning, Converter={x:Static models:SessionIconConverter.Instance}}"/>
+                                </Border>
+
+                                <!-- Info -->
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding CategoryName}" FontSize="16" FontWeight="Bold"
+                                               Foreground="{StaticResource PrimaryTextBrush}"/>
+                                    <TextBlock FontSize="12" Foreground="{StaticResource SecondaryTextBrush}"
+                                               Margin="0,2,0,0">
+                                        <Run Text="Modo:"/>
+                                        <Run Text="{Binding Mode, Mode=OneWay}" FontWeight="SemiBold"/>
+                                        <Run Text=" — "/>
+                                        <Run Text="{Binding StartedAt, StringFormat='{}{0:HH:mm:ss}'}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding StatusMessage}" FontSize="12"
+                                               Foreground="{StaticResource MutedTextBrush}"
+                                               Margin="0,4,0,0" TextWrapping="Wrap"/>
+
+                                    <!-- Progress bar -->
+                                    <ProgressBar Value="{Binding Progress}" Maximum="100"
+                                                 Style="{StaticResource DarkProgressBar}"
+                                                 Height="4" Margin="0,8,0,0"
+                                                 Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}"/>
+                                </StackPanel>
+
+                                <!-- Count -->
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center" 
+                                            HorizontalAlignment="Right" Margin="14,0,0,0">
+                                    <TextBlock Text="{Binding ProgressText}" FontSize="20" FontWeight="Bold"
+                                               Foreground="{StaticResource AccentBrush}"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Text="tweaks" FontSize="10"
+                                               Foreground="{StaticResource MutedTextBrush}"
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

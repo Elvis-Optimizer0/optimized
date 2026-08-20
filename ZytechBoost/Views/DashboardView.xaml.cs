@@ -68,7 +68,6 @@ public partial class DashboardView : UserControl
 
     private void AnimateTilesIn()
     {
-        // Wait for layout, then animate tiles
         Dispatcher.BeginInvoke(async () =>
         {
             await Task.Delay(100);
@@ -81,7 +80,6 @@ public partial class DashboardView : UserControl
                              ?? cp.Content as FrameworkElement;
                     if (fe == null)
                     {
-                        // Try to find the button inside
                         var btn = VisualTreeHelper.GetChild(cp, 0) as Button;
                         fe = btn;
                     }
@@ -118,7 +116,6 @@ public partial class DashboardView : UserControl
         {
             if (category.IsExtreme)
             {
-                // Open confirmation modal first
                 var modal = new ConfirmationModal(category);
                 modal.Owner = MainWindow.Instance;
                 modal.ShowDialog();
@@ -142,42 +139,72 @@ public partial class DashboardView : UserControl
 
         if (result != MessageBoxResult.Yes) return;
 
+        // Show execution panel on the right
+        ExecPanel.Visibility = Visibility.Visible;
+        BtnOptimizeAll.IsEnabled = false;
+        BtnExtremeMode.IsEnabled = false;
+
         // Create restore point first
         if (!_restorePointDone)
         {
             MainWindow.Instance!.StatusBarText.Text = "Creando punto de restauración...";
+            MainWindow.Log("Creando punto de restauración...");
             await PowerShellEngine.CreateRestorePointAsync();
             _restorePointDone = true;
             RestoreStatusText.Text = "Creado ✓";
             RestoreStatusText.Foreground = (Brush)FindResource("SuccessBrush");
         }
 
-        // Execute all safe categories
-        MainWindow.Instance!.StatusBarText.Text = "Ejecutando optimizaciones seguras...";
-        var safeFunctions = new List<string>();
-        foreach (var cat in _categories.Where(c => !c.IsExtreme))
-        {
-            safeFunctions.AddRange(cat.ScriptFunctions);
-        }
+        // Execute with real-time progress panel
+        await ExecPanel.ExecuteAllSafeAsync(_categories);
 
-        await PowerShellEngine.ExecuteFunctionsAsync(safeFunctions);
-        MainWindow.Log("Todas las optimizaciones seguras ejecutadas.");
-        MainWindow.Instance!.StatusBarText.Text = "¡Optimización segura completada! Reinicia para efecto completo.";
+        // Re-enable buttons
+        BtnOptimizeAll.IsEnabled = true;
+        BtnExtremeMode.IsEnabled = true;
+        MainWindow.Instance!.StatusBarText.Text = "¡Optimización completada!";
     }
 
-    private void BtnExtremeMode_Click(object sender, RoutedEventArgs e)
+    private async void BtnExtremeMode_Click(object sender, RoutedEventArgs e)
     {
         var extremeCategories = _categories.Where(c => c.IsExtreme).ToList();
-        if (extremeCategories.Any())
+        if (!extremeCategories.Any()) return;
+
+        var modal = new ConfirmationModal(extremeCategories);
+        modal.Owner = MainWindow.Instance;
+        var dialogResult = modal.ShowDialog();
+
+        if (dialogResult == true)
         {
-            var modal = new ConfirmationModal(extremeCategories);
-            modal.Owner = MainWindow.Instance;
-            modal.ShowDialog();
+            // Show execution panel
+            ExecPanel.Visibility = Visibility.Visible;
+            BtnOptimizeAll.IsEnabled = false;
+            BtnExtremeMode.IsEnabled = false;
+
+            // Create restore point if needed
+            if (!_restorePointDone)
+            {
+                MainWindow.Instance!.StatusBarText.Text = "Creando punto de restauración...";
+                await PowerShellEngine.CreateRestorePointAsync();
+                _restorePointDone = true;
+                RestoreStatusText.Text = "Creado ✓";
+                RestoreStatusText.Foreground = (Brush)FindResource("SuccessBrush");
+            }
+
+            await ExecPanel.ExecuteAllExtremeAsync(_categories);
+
+            BtnOptimizeAll.IsEnabled = true;
+            BtnExtremeMode.IsEnabled = true;
+            MainWindow.Instance!.StatusBarText.Text = "¡Modo extremo completado!";
         }
     }
 
     private void BtnViewLog_Click(object sender, RoutedEventArgs e)
     {
         MainWindow.Instance?.NavigateTo(new LogView());
+    }
+
+    private void BtnViewHistory_Click(object sender, RoutedEventArgs e)
+    {
+        MainWindow.Instance?.NavigateTo(new ExecutionHistoryView());
     }
 }
