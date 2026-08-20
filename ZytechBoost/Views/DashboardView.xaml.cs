@@ -62,7 +62,7 @@ public partial class DashboardView : UserControl
                 RepeatBehavior = RepeatBehavior.Forever,
                 EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
             };
-            glowBrush.BeginAnimation(System.Windows.Media.Effect.OpacityProperty, pulse);
+            glowBrush.BeginAnimation(global::System.Windows.Media.Effects.Effect.OpacityProperty, pulse);
         }
     }
 
