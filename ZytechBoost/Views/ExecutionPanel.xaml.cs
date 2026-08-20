@@ -332,15 +332,20 @@ public partial class ExecutionPanel : UserControl
         var container = EventsList.ItemContainerGenerator.ContainerFromItem(evt) as ContentPresenter;
         if (container != null)
         {
-            container.Background = new SolidColorBrush(Color.FromArgb(20, 34, 197, 94));
-            var fadeOut = new ColorAnimation
+            // ContentPresenter doesn't have Background, use a Border child instead
+            var border = VisualTreeHelper.GetChild(container, 0) as Border;
+            if (border != null)
             {
-                From = Color.FromArgb(20, 34, 197, 94),
-                To = Colors.Transparent,
-                Duration = new Duration(TimeSpan.FromSeconds(1)),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-            };
-            container.Background.BeginAnimation(SolidColorBrush.ColorProperty, fadeOut);
+                border.Background = new SolidColorBrush(Color.FromArgb(20, 34, 197, 94));
+                var fadeOut = new ColorAnimation
+                {
+                    From = Color.FromArgb(20, 34, 197, 94),
+                    To = Colors.Transparent,
+                    Duration = new Duration(TimeSpan.FromSeconds(1)),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+                border.Background.BeginAnimation(SolidColorBrush.ColorProperty, fadeOut);
+            }
         }
     }
 

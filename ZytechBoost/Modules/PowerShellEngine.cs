@@ -584,7 +584,7 @@ Write-Output ""$ram|$deviceType|$($null -ne $battery)""
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
 
-        await process.StandardInput.WriteAsync(script, ct);
+        await process.StandardInput.WriteAsync(script.ToCharArray(), 0, script.Length, ct);
         process.StandardInput.Close();
 
         await process.WaitForExitAsync(ct);
