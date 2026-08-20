@@ -110,7 +110,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock x:Name="StatusBarText" 
+                    <TextBlock x:Name="StatusBarText" x:FieldModifier="public"
                                Text="Listo"
                                FontFamily="Segoe UI" FontSize="11"
                                Foreground="{StaticResource MutedTextBrush}"

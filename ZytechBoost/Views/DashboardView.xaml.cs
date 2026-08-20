@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using ZytechBoost.Models;
 using ZytechBoost.Modules;
 
@@ -144,7 +145,7 @@ public partial class DashboardView : UserControl
         // Create restore point first
         if (!_restorePointDone)
         {
-            StatusBarText.Text = "Creando punto de restauración...";
+            MainWindow.Instance!.StatusBarText.Text = "Creando punto de restauración...";
             await PowerShellEngine.CreateRestorePointAsync();
             _restorePointDone = true;
             RestoreStatusText.Text = "Creado ✓";
@@ -152,7 +153,7 @@ public partial class DashboardView : UserControl
         }
 
         // Execute all safe categories
-        StatusBarText.Text = "Ejecutando optimizaciones seguras...";
+        MainWindow.Instance!.StatusBarText.Text = "Ejecutando optimizaciones seguras...";
         var safeFunctions = new List<string>();
         foreach (var cat in _categories.Where(c => !c.IsExtreme))
         {
@@ -161,7 +162,7 @@ public partial class DashboardView : UserControl
 
         await PowerShellEngine.ExecuteFunctionsAsync(safeFunctions);
         MainWindow.Log("Todas las optimizaciones seguras ejecutadas.");
-        StatusBarText.Text = "¡Optimización segura completada! Reinicia para efecto completo.";
+        MainWindow.Instance!.StatusBarText.Text = "¡Optimización segura completada! Reinicia para efecto completo.";
     }
 
     private void BtnExtremeMode_Click(object sender, RoutedEventArgs e)

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using ZytechBoost.Models;
@@ -163,7 +164,7 @@ Write-Output ""$ram|$deviceType|$($null -ne $battery)""
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
 
-        await process.StandardInput.WriteAsync(script, ct);
+        await process.StandardInput.WriteAsync(script);
         process.StandardInput.Close();
 
         MainWindow.Log($"Ejecutando script PowerShell ({script.Length} caracteres)");
