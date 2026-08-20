@@ -47,14 +47,14 @@ public partial class DashboardView : UserControl
     {
         if (BtnOptimizeAll.Template?.FindName("border", BtnOptimizeAll) is System.Windows.Controls.Border border)
         {
-            var glowBrush = new DropShadowEffect
+            var glowEffect = new DropShadowEffect
             {
                 Color = (Color)FindResource("Accent"),
                 BlurRadius = 30,
                 ShadowDepth = 0,
                 Opacity = 0.3
             };
-            border.Effect = glowBrush;
+            border.Effect = glowEffect;
 
             var pulse = new DoubleAnimation(0.3, 0.7, TimeSpan.FromSeconds(1.5))
             {
@@ -62,7 +62,7 @@ public partial class DashboardView : UserControl
                 RepeatBehavior = RepeatBehavior.Forever,
                 EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
             };
-            glowBrush.BeginAnimation(global::System.Windows.Media.Effects.Effect.OpacityProperty, pulse);
+            glowEffect.BeginAnimation(OpacityProperty, pulse);
         }
     }
 
