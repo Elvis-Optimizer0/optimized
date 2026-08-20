@@ -3,7 +3,9 @@ name: Build Zytech Boost
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # Permitir ejecución manual
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -20,6 +22,12 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore ZytechBoost/ZytechBoost.csproj
+
+    - name: Build (Debug)
+      run: dotnet build ZytechBoost/ZytechBoost.csproj -c Debug --no-restore
+
+    - name: Build (Release)
+      run: dotnet build ZytechBoost/ZytechBoost.csproj -c Release --no-restore
 
     - name: Publish self-contained exe
       run: |
@@ -38,3 +46,13 @@ jobs:
         name: ZytechBoost-exe
         path: publish/ZytechBoost.exe
         retention-days: 30
+
+    - name: Upload debug artifact
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ZytechBoost-debug
+        path: |
+          ZytechBoost/bin/Release/net8.0-windows/**/*.pdb
+        retention-days: 7
+        if-no-files-found: ignore
