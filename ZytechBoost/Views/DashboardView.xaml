@@ -40,7 +40,7 @@
                              Fill="Transparent"/>
                     <Ellipse x:Name="ProgressRing" Stroke="{StaticResource AccentBrush}" 
                              StrokeThickness="6" Fill="Transparent"
-                             StrokeDashArray="3.14 3.14" StrokeLineCap="Round">
+                             StrokeDashArray="3.14 3.14" StrokeDashCap="Round">
                         <Ellipse.RenderTransform>
                             <RotateTransform Angle="-90" CenterX="40" CenterY="40"/>
                         </Ellipse.RenderTransform>
